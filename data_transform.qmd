@@ -1,0 +1,354 @@
+---
+title: "Data Transformation"
+author: "R Trainer: Binod Jung Bogati (linkedin.com/in/bjungbogati)"
+copyright: "© 2025. Unauthorized distribution or reuse prohibited."
+format: html
+editor: visual
+---
+
+## Data Transformation
+
+## What is Data Transformation?
+
+-   The process of changing, organizing, and analyzing data
+
+-   It involves filtering, selecting, sorting, summarizing  data.
+
+-   `dplyr` is a package in R used for data transformation
+
+## Function I
+
+| Functions | Description |
+|-------------------------|-----------------------------------------------|
+| `filter()` | Selects rows based on conditions |
+| `select()` | Selects specific columns |
+| `arrange()` | Sorts rows in ascending/descending order |
+| `mutate()` | Creates new columns |
+| `summarise()` | Summarizes data using functions like `mean()`, `sum()`, etc. |
+| `group_by()` %\>% `summarise()` | Groups data before summarization |
+
+## Function II
+
+| Functions | Description |
+|-------------------------|-----------------------------------------------|
+| `if_else()` | Conditional statement |
+| `case_when()` | Allows multiple conditions |
+| `distinct()` | Removes duplicate rows based on one/multiple columns |
+| `mean()`, `median()`, `max()` | Performs basic statistics |
+| `n()` | Counts the number of rows in each group |
+| `row_number()` | Assigns row numbers |
+
+## Load
+
+```{r}
+library(tidyverse)
+
+load(url("https://bit.ly/3GFedAS"))
+```
+
+## View
+
+```{r}
+our_data
+```
+
+## Filter
+
+```{r}
+filter(our_data, AGE > 50)
+```
+
+## Chaining
+
+```{r }
+our_data |>
+  filter(AGE > 50)
+```
+
+## Your Turn 01
+
+-   Complete the following code to filter subjects who are above the age of 40 and are female.
+
+```{r}
+our_data |> 
+  filter(AGE > ..., ... == "F")
+```
+
+## Select
+
+```{r}
+our_data |> 
+  select(SUBJECT, AGE)
+```
+
+## Your Turn 02
+
+-   Complete the following code to select Subject, Height and Weight from our data.
+
+```{r}
+
+
+
+
+
+```
+
+## Mutate
+
+```{r}
+our_data |> 
+  select(WEIGHT) |>
+  mutate(WEIGHT_LBS = WEIGHT * 2.20462)
+```
+
+## Your Turn 03
+
+-   Create a new variable "HEIGHT_M" to calculate the value of the HEIGHT variable (in cm) in meter.
+-   Select Subject, Height and HEIGHT_M
+
+> Hint: value in meter = (value in cm)/100.
+
+```{r}
+our_data |> d
+  mutate(HEIGHT_M = ...) |> 
+  select(SUBJECT, ..., ...)
+```
+
+# Group and Summarize
+
+## Summary statistics
+
+```{r}
+our_data |> 
+  summarize(
+    avg_height = mean(HEIGHT, na.rm = TRUE),
+    median_weight = median(WEIGHT, na.rm = TRUE),
+    min_bmi = min(BMI, na.rm = TRUE),
+    max_age = max(AGE, na.rm = FALSE),
+    q25_sysbp = quantile(SYSBP, 0.25, na.rm = TRUE)
+  )
+```
+
+## Group by and Summarize
+
+```{r}
+our_data |> 
+  group_by(SEX) |> 
+  summarize(average_age = mean(AGE, na.rm=TRUE))
+```
+
+## Imputation
+
+```{r}
+our_data |> 
+  mutate(SEX = if_else(is.na(SEX), "MISSING", SEX)) |> 
+  group_by(SEX) |> 
+  summarize(average_age = mean(AGE, na.rm=TRUE))
+```
+
+## Your Turn 04
+
+Group by SITE with multiple summary statistics:
+
+-   average Systolic BP,
+-   maximum Diastolic BP,
+-   mininum Age
+
+```{r}
+our_data %>%
+  group_by(...) %>%
+  summarise(
+    avg_sysbp = ..., 
+    max_diabp = ..., 
+    ....
+  )
+```
+
+## Count
+
+```{r}
+our_data %>%
+  group_by(RACE) %>%
+  summarize(count = n())
+```
+
+## Arrange
+
+```{r}
+our_data |> 
+  arrange(desc(AGE))
+```
+
+## Your Turn 04
+
+-   Arrange data by Height in ascending order.
+
+```{r}
+our_data |> 
+
+
+
+```
+
+## Rank
+
+```{r}
+our_data |> 
+  select(SUBJECT) |>
+  arrange(SUBJECT) |> 
+  mutate(RANK = row_number())
+```
+
+## Rename
+
+``` r
+data |> rename(new_name = old_name, ...)
+```
+
+```{r}
+our_data |> 
+  rename(ID = SITEID, PATIENT = SUBJECT)
+```
+
+# Conditions
+
+## If else
+
+```{r}
+our_data |> 
+  select(AGE) |> 
+  mutate(
+    AGECAT = if_else(AGE < 50, "Young", "Old")
+  )
+```
+
+## Your Turn 05
+
+-   Create new variable SEXFMT.
+-   Assign M as "Male" and F as "Female"
+
+```{r}
+our_data |> 
+  select(SEX) |> 
+  mutate(
+    SEXFMT = if_else(SEX == "M", "Male", "Female")
+  )
+```
+
+## Case When
+
+-   Age Group
+
+``` r
+0-12: Child
+13-19: Teen
+20-39: Young Adult
+40-59: Middle-aged Adult
+60+: Elder
+```
+
+```{r}
+our_data |>
+  select(AGE) |> 
+  mutate(
+  AGECAT = case_when(
+      AGE >= 60 & AGE <= 150 ~ "Elder",
+      between(AGE, 40, 59) ~ "Middle-aged Adult",
+      between(AGE, 20, 39) ~ "Young Adult",
+      between(AGE, 13, 19) ~ "Teen",
+      between(AGE, 0, 12) ~ "Child",
+      TRUE ~ "Not Reported"
+      )
+    ) 
+
+
+```
+
+## Your Turn 06
+
+-   Complete the case_when() statement to categorize BMI values according to these classifications:
+
+``` r
+Underweight: BMI < 18.5
+Normal Weight: 18.5 ≤ BMI ≤ 24.9
+Overweight: 25.0 ≤ BMI ≤ 29.9
+Obesity Class 1: 30.0 ≤ BMI ≤ 34.9
+Obesity Class 2: 35.0 ≤ BMI ≤ 39.9
+Obesity Class 3: BMI ≥ 40
+```
+
+```{r}
+our_data |> 
+  select(BMI) |> 
+  mutate(
+    BMICAT = case_when(
+      BMI < 18.5 ~ "Underweight",
+       ___________________________,
+       ___________________________,
+       ___________________________,
+       ___________________________,
+      BMI >= 40 ~ "Obesity Class 3",
+      TRUE ~ "Not Reported"
+  )
+)
+```
+
+## Distinct
+
+```{r}
+our_data |> 
+  distinct()
+```
+
+```{r}
+our_data |> 
+  distinct(SEX)
+```
+
+```{r}
+our_data |> 
+  distinct(SEX, .keep_all = TRUE)
+```
+
+## Your Turn 07
+
+-   Create distinct result for RACE variable and keep all columns.
+
+```{r}
+our_data |>
+  distinct(  , .keep_all = TRUE)
+```
+
+# Bind Data
+
+| Function    | Description                  |     |
+|-------------|------------------------------|-----|
+| bind_rows() | Row-wise combine data set    |     |
+| bind_cols() | Column-wise combine data set |     |
+
+## Bind
+
+### Row Bind #1
+
+```{r}
+four <- bind_rows(one, two)
+four
+```
+
+### Col Bind #1
+
+```{r}
+bind_cols(four, three)
+```
+
+### Row Bind #2
+
+```{r}
+bind_rows(one, two, three)
+```
+
+### Col Bind #2
+
+```{r}
+bind_cols(one, three)
+```
