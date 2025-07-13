@@ -16,23 +16,23 @@ editor: visual
 
 ## Function I
 
-+-----------------------+--------------------------------------------------------------+
-| Functions             | Description                                                  |
-+=======================+==============================================================+
-| `filter()`            | Selects rows based on conditions                             |
-+-----------------------+--------------------------------------------------------------+
-| `select()`            | Selects specific columns                                     |
-+-----------------------+--------------------------------------------------------------+
-| `arrange()`           | Sorts rows in ascending/descending order                     |
-+-----------------------+--------------------------------------------------------------+
-| `mutate()`            | Creates new columns                                          |
-+-----------------------+--------------------------------------------------------------+
-| `summarise()`         | Summarizes data using functions like `mean()`, `sum()`, etc. |
-+-----------------------+--------------------------------------------------------------+
-| `group_by()` \|\>     | Groups data before summarization                             |
-|                       |                                                              |
-| `ßsummarise()`        |                                                              |
-+-----------------------+--------------------------------------------------------------+
++-------------------+--------------------------------------------------------------+
+| Functions         | Description                                                  |
++===================+==============================================================+
+| `filter()`        | Selects rows based on conditions                             |
++-------------------+--------------------------------------------------------------+
+| `select()`        | Selects specific columns                                     |
++-------------------+--------------------------------------------------------------+
+| `arrange()`       | Sorts rows in ascending/descending order                     |
++-------------------+--------------------------------------------------------------+
+| `mutate()`        | Creates new columns                                          |
++-------------------+--------------------------------------------------------------+
+| `summarise()`     | Summarizes data using functions like `mean()`, `sum()`, etc. |
++-------------------+--------------------------------------------------------------+
+| `group_by()` \|\> | Groups data before summarization                             |
+|                   |                                                              |
+| `ßsummarise()`    |                                                              |
++-------------------+--------------------------------------------------------------+
 
 ## Load
 
@@ -133,15 +133,6 @@ our_data |>
   summarize(average_age = mean(AGE, na.rm=TRUE))
 ```
 
-## Imputation
-
-```{r}
-our_data |> 
-  mutate(SEX = if_else(is.na(SEX), "MISSING", SEX)) |> 
-  group_by(SEX) |> 
-  summarize(average_age = mean(AGE, na.rm=TRUE))
-```
-
 ## Your Turn 04
 
 Group by SITE with multiple summary statistics:
@@ -177,7 +168,6 @@ our_data |>
 +-------------------------------+------------------------------------------------------+
 | `row_number()`                | Assigns row numbers                                  |
 +-------------------------------+------------------------------------------------------+
-
 
 ## Count
 
@@ -247,6 +237,15 @@ our_data |>
   mutate(
     SEXFMT = if_else(SEX == "M", "Male", "Female")
   )
+```
+
+## Imputation
+
+```{r}
+our_data |> 
+  mutate(SEX = if_else(is.na(SEX), "MISSING", SEX)) |> 
+  group_by(SEX) |> 
+  summarize(average_age = mean(AGE, na.rm=TRUE))
 ```
 
 ## Case When
