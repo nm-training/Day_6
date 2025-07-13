@@ -12,31 +12,47 @@ editor: visual
 
 -   The process of changing, organizing, and analyzing data
 
--   It involves filtering, selecting, sorting, summarizing  data.
+-   It involves filtering, selecting, sorting, summarizing data.
 
 -   `dplyr` is a package in R used for data transformation
 
 ## Function I
 
-| Functions | Description |
-|-------------------------|-----------------------------------------------|
-| `filter()` | Selects rows based on conditions |
-| `select()` | Selects specific columns |
-| `arrange()` | Sorts rows in ascending/descending order |
-| `mutate()` | Creates new columns |
-| `summarise()` | Summarizes data using functions like `mean()`, `sum()`, etc. |
-| `group_by()` %\>% `summarise()` | Groups data before summarization |
++-----------------------+--------------------------------------------------------------+
+| Functions             | Description                                                  |
++=======================+==============================================================+
+| `filter()`            | Selects rows based on conditions                             |
++-----------------------+--------------------------------------------------------------+
+| `select()`            | Selects specific columns                                     |
++-----------------------+--------------------------------------------------------------+
+| `arrange()`           | Sorts rows in ascending/descending order                     |
++-----------------------+--------------------------------------------------------------+
+| `mutate()`            | Creates new columns                                          |
++-----------------------+--------------------------------------------------------------+
+| `summarise()`         | Summarizes data using functions like `mean()`, `sum()`, etc. |
++-----------------------+--------------------------------------------------------------+
+| `group_by()` \|\>     | Groups data before summarization                             |
+|                       |                                                              |
+| `ßsummarise()`        |                                                              |
++-----------------------+--------------------------------------------------------------+
 
 ## Function II
 
-| Functions | Description |
-|-------------------------|-----------------------------------------------|
-| `if_else()` | Conditional statement |
-| `case_when()` | Allows multiple conditions |
-| `distinct()` | Removes duplicate rows based on one/multiple columns |
-| `mean()`, `median()`, `max()` | Performs basic statistics |
-| `n()` | Counts the number of rows in each group |
-| `row_number()` | Assigns row numbers |
++-------------------------------+------------------------------------------------------+
+| Functions                     | Description                                          |
++===============================+======================================================+
+| `if_else()`                   | Conditional statement                                |
++-------------------------------+------------------------------------------------------+
+| `case_when()`                 | Allows multiple conditions                           |
++-------------------------------+------------------------------------------------------+
+| `distinct()`                  | Removes duplicate rows based on one/multiple columns |
++-------------------------------+------------------------------------------------------+
+| `mean()`, `median()`, `max()` | Performs basic statistics                            |
++-------------------------------+------------------------------------------------------+
+| `n()`                         | Counts the number of rows in each group              |
++-------------------------------+------------------------------------------------------+
+| `row_number()`                | Assigns row numbers                                  |
++-------------------------------+------------------------------------------------------+
 
 ## Load
 
@@ -109,7 +125,7 @@ our_data |>
 > Hint: value in meter = (value in cm)/100.
 
 ```{r}
-our_data |> d
+our_data |> 
   mutate(HEIGHT_M = ...) |> 
   select(SUBJECT, ..., ...)
 ```
@@ -155,8 +171,8 @@ Group by SITE with multiple summary statistics:
 -   mininum Age
 
 ```{r}
-our_data %>%
-  group_by(...) %>%
+our_data |> 
+  group_by(...) |> 
   summarise(
     avg_sysbp = ..., 
     max_diabp = ..., 
@@ -167,9 +183,8 @@ our_data %>%
 ## Count
 
 ```{r}
-our_data %>%
-  group_by(RACE) %>%
-  summarize(count = n())
+our_data |> 
+  count(RACE)
 ```
 
 ## Arrange
@@ -179,7 +194,7 @@ our_data |>
   arrange(desc(AGE))
 ```
 
-## Your Turn 04
+## Your Turn 05
 
 -   Arrange data by Height in ascending order.
 
@@ -222,7 +237,7 @@ our_data |>
   )
 ```
 
-## Your Turn 05
+## Your Turn 06
 
 -   Create new variable SEXFMT.
 -   Assign M as "Male" and F as "Female"
@@ -264,7 +279,7 @@ our_data |>
 
 ```
 
-## Your Turn 06
+## Your Turn 07
 
 -   Complete the case_when() statement to categorize BMI values according to these classifications:
 
@@ -310,7 +325,7 @@ our_data |>
   distinct(SEX, .keep_all = TRUE)
 ```
 
-## Your Turn 07
+## Your Turn 08
 
 -   Create distinct result for RACE variable and keep all columns.
 
